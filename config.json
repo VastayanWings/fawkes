@@ -1,0 +1,24 @@
+{
+    "client_id": "",
+    "guild_id": "",
+
+    "welcomechannel": "", 
+    "rulechannel": "",
+    "rolechannel": "",
+  
+    "embersrole": "",
+    "streamrole": "",
+    "ff14role": "",
+    "minecraftrole": "",
+    "overwatchrole": "",
+    "arknightsrole": "",
+    "leaguerole": "",
+  
+    "acceptrulesemote": "", 
+    "streamemote": "",
+    "ff14emote": "",
+    "minecraftemote": "",
+    "overwatchemote": "",
+    "arknightsemote": "",
+    "leagueemote": ""
+}
