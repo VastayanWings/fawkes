@@ -33,6 +33,7 @@ client.once(Discord.Events.ClientReady, async () => {
 	client.user.setPresence({ activities: [{ name: `ttv/vastayanwings`, type: 1, url: "https://twitch.tv/vastayanwings" }]});
 });
 
+
 client.on(Discord.Events.GuildMemberAdd, member => {
   console.log(member.user.tag + "joined the Server");
     
@@ -48,16 +49,11 @@ client.on(Discord.Events.GuildMemberAdd, member => {
   });
 
 
-
   client.on(Discord.Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
-
-    interaction.reply(".")
-    .then(interaction.deleteReply());
   
     const command = interaction.client.commands.get(interaction.commandName);
    
-  
     if (!command) {
       console.error(`No command matching ${interaction.commandName} was found.`);
       return;
@@ -65,6 +61,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
   
     try {
       await command.execute(interaction);
+      await interaction.reply({ content: 'Command successfull executed!', ephemeral: true });
     } catch (error) {
       console.error(error);
       await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
@@ -72,8 +69,10 @@ client.on(Discord.Events.GuildMemberAdd, member => {
   });
 
 
-
   client.on(Discord.Events.MessageReactionAdd, (reaction, user) => {
+
+    if (user.id == client.user.id) return;
+
     const rulechannel = client.channels.cache.get(config.rulechannel);
     const rolechannel = client.channels.cache.get(config.rolechannel);
     const embersrole = client.guilds.cache.get(config.guild_id).roles.cache.get(config.embersrole);
@@ -90,11 +89,9 @@ client.on(Discord.Events.GuildMemberAdd, member => {
     const overwatchemote = config.overwatchemote;
     const arknightsemote = config.arknightsemote;
     const leagueemote = config.leagueemote;
- 
-       if (user.id == client.user.id) return;
 
             if (reaction.message.channel.id == rulechannel && reaction.emoji.toString() == acceptrulesemote) {
-              console.log(user.tag + " reacted with " + acceptrulesemote.name);
+              console.log(user.tag + " reacted with " + acceptrulesemote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(embersrole)
               .then(console.log("role " + embersrole.name + " added to " + user.tag))}
@@ -102,7 +99,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == streamemote) {
-              console.log(user.tag + " reacted with " + streamemote.name);
+              console.log(user.tag + " reacted with " + streamemote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(streamrole)
               .then(console.log("role " + streamrole.name + " added to " + user.tag))}
@@ -110,7 +107,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == ff14emote) {
-              console.log(user.tag + " reacted with " + ff14emote.name);
+              console.log(user.tag + " reacted with " + ff14emote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(ff14role)
               .then(console.log("role " + ff14role.name + " added to " + user.tag))}
@@ -118,7 +115,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == arknightsemote) {
-              console.log(user.tag + " reacted with " + arknightsemote.name);
+              console.log(user.tag + " reacted with " + arknightsemote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(arknightsrole)
               .then(console.log("role " + arknightsrole.name + " added to " + user.tag))}
@@ -126,7 +123,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == leagueemote) {
-              console.log(user.tag + " reacted with " + leagueemote.name);
+              console.log(user.tag + " reacted with " + leagueemote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(leaguerole)
               .then(console.log("role " + leaguerole.name + " added to " + user.tag))}
@@ -134,7 +131,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == overwatchemote) {
-              console.log(user.tag + " reacted with " + overwatchemote.name);
+              console.log(user.tag + " reacted with " + overwatchemote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(overwatchrole)
               .then(console.log("role " + overwatchrole.name + " added to " + user.tag))}
@@ -142,7 +139,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == minecraftemote) {
-              console.log(user.tag + " reacted with " + minecraftemote.name);
+              console.log(user.tag + " reacted with " + minecraftemote);
               try
               {reaction.message.guild.members.cache.get(user.id).roles.add(minecraftrole)
               .then(console.log("role " + minecraftrole.name + " added to " + user.tag))}
@@ -150,10 +147,13 @@ client.on(Discord.Events.GuildMemberAdd, member => {
                 console.error(error);
               }
             }
-          
   });
 
+
   client.on(Discord.Events.MessageReactionRemove, (reaction, user) => {
+
+    if (user.id == client.user.id) return;
+
     const rulechannel = client.channels.cache.get(config.rulechannel);
     const rolechannel = client.channels.cache.get(config.rolechannel);
     const embersrole = client.guilds.cache.get(config.guild_id).roles.cache.get(config.embersrole);
@@ -170,11 +170,9 @@ client.on(Discord.Events.GuildMemberAdd, member => {
     const overwatchemote = config.overwatchemote;
     const arknightsemote = config.arknightsemote;
     const leagueemote = config.leagueemote;
- 
-    if (user.id == client.user.id) return;
 
          if (reaction.message.channel.id == rulechannel && reaction.emoji.toString() == acceptrulesemote) {
-           console.log(user.tag + " removed reaction " + acceptrulesemote.name);
+           console.log(user.tag + " removed reaction " + acceptrulesemote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(embersrole)
            .then(console.log("role " + embersrole.name + " removed from " + user.tag))}
@@ -182,7 +180,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
              console.error(error);
            }
          } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == streamemote) {
-           console.log(user.tag + " removed reaction " + streamemote.name);
+           console.log(user.tag + " removed reaction " + streamemote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(streamrole)
            .then(console.log("role " + streamrole.name + " removed from " + user.tag))}
@@ -190,7 +188,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
              console.error(error);
            }
          } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == ff14emote) {
-           console.log(user.tag + " removed reaction " + ff14emote.name);
+           console.log(user.tag + " removed reaction " + ff14emote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(ff14role)
            .then(console.log("role " + ff14role.name + " removed from " + user.tag))}
@@ -198,7 +196,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
              console.error(error);
            }
          } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == arknightsemote) {
-           console.log(user.tag + " removed reaction " + arknightsemote.name);
+           console.log(user.tag + " removed reaction " + arknightsemote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(arknightsrole)
            .then(console.log("role " + arknightsrole.name + " removed from " + user.tag))}
@@ -206,7 +204,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
              console.error(error);
            }
          } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == leagueemote) {
-           console.log(user.tag + " removed reaction " + leagueemote.name);
+           console.log(user.tag + " removed reaction " + leagueemote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(leaguerole)
            .then(console.log("role " + leaguerole.name + " removed from " + user.tag))}
@@ -214,7 +212,7 @@ client.on(Discord.Events.GuildMemberAdd, member => {
              console.error(error);
            }
          } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == overwatchemote) {
-           console.log(user.tag + " removed reaction " + overwatchemote.name);
+           console.log(user.tag + " removed reaction " + overwatchemote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(overwatchrole)
            .then(console.log("role " + overwatchrole.name + " removed from " + user.tag))}
@@ -222,19 +220,15 @@ client.on(Discord.Events.GuildMemberAdd, member => {
              console.error(error);
            }
          } else if (reaction.message.channel.id == rolechannel && reaction.emoji.toString() == minecraftemote) {
-           console.log(user.tag + " removed reaction " + minecraftemote.name);
+           console.log(user.tag + " removed reaction " + minecraftemote);
            try
            {reaction.message.guild.members.cache.get(user.id).roles.remove(minecraftrole)
            .then(console.log("role " + minecraftrole.name + " removed from " + user.tag))}
            catch (error) {
              console.error(error);
            }
-         }
-          
+         }         
   });
-
-
-
 
 
 client.login(process.env.BOT_TOKEN)
